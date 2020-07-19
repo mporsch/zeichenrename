@@ -31,6 +31,14 @@ namespace zeichenrename {
 		}
 
 	private: System::Windows::Forms::Button^  button3;
+	private: System::Windows::Forms::TextBox^  textBox3;
+	private: System::Windows::Forms::Label^  label5;
+	private: System::Windows::Forms::Button^  btnSave;
+	private: System::Windows::Forms::Button^  btnReset;
+	private: System::Windows::Forms::Button^  btnDown;
+	private: System::Windows::Forms::Button^  btnUp;
+	private: System::Windows::Forms::CheckBox^  cbAddNumbers;
+
 	private: System::Windows::Forms::FolderBrowserDialog^  folderBrowserDialog1;
 	
 	protected:
@@ -46,23 +54,28 @@ namespace zeichenrename {
 		}
 	private: System::Windows::Forms::ListBox^  listBox1;
 	private: System::Windows::Forms::Label^  label1;
-	private: System::Windows::Forms::TextBox^  textBox1;
-	private: System::Windows::Forms::TextBox^  textBox2;
+	private: System::Windows::Forms::TextBox^  tbOldString;
+	private: System::Windows::Forms::TextBox^  tbNewString;
+
+
+
 	private: System::Windows::Forms::Label^  label2;
 	private: System::Windows::Forms::Label^  label3;
-	private: System::Windows::Forms::Button^  button1;
+
 	private: System::Windows::Forms::ListBox^  listBox2;
 	private: System::Windows::Forms::Label^  label4;
-	private: System::Windows::Forms::Button^  button2;
+	private: System::Windows::Forms::Button^  btnRename;
+
 	
 	private:
 		/// <summary>
 		/// Erforderliche Designervariable.
 
-		array<String^>^ neueNamen;
-		array<String^>^ alteNamen;
-
-		int anzahl;
+		array<String^>^ gNewNames;
+		array<String^>^ gOldNames;
+		array<String^>^ gIntermediateNames;
+		int gNumFiles;
+		String^ gFilePath;
 
 		/// </summary>
 		System::ComponentModel::Container ^components;
@@ -76,136 +89,225 @@ namespace zeichenrename {
 		{
 			this->listBox1 = (gcnew System::Windows::Forms::ListBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
+			this->tbOldString = (gcnew System::Windows::Forms::TextBox());
+			this->tbNewString = (gcnew System::Windows::Forms::TextBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->listBox2 = (gcnew System::Windows::Forms::ListBox());
 			this->label4 = (gcnew System::Windows::Forms::Label());
-			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->btnRename = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->folderBrowserDialog1 = (gcnew System::Windows::Forms::FolderBrowserDialog());
+			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
+			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->btnSave = (gcnew System::Windows::Forms::Button());
+			this->btnReset = (gcnew System::Windows::Forms::Button());
+			this->btnDown = (gcnew System::Windows::Forms::Button());
+			this->btnUp = (gcnew System::Windows::Forms::Button());
+			this->cbAddNumbers = (gcnew System::Windows::Forms::CheckBox());
 			this->SuspendLayout();
 			// 
 			// listBox1
 			// 
 			this->listBox1->FormattingEnabled = true;
 			this->listBox1->HorizontalScrollbar = true;
-			this->listBox1->Location = System::Drawing::Point(16, 31);
+			this->listBox1->ItemHeight = 16;
+			this->listBox1->Location = System::Drawing::Point(14, 39);
+			this->listBox1->Margin = System::Windows::Forms::Padding(4);
 			this->listBox1->Name = L"listBox1";
-			this->listBox1->Size = System::Drawing::Size(147, 212);
+			this->listBox1->Size = System::Drawing::Size(295, 324);
 			this->listBox1->TabIndex = 0;
 			// 
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(13, 15);
+			this->label1->Location = System::Drawing::Point(11, 18);
+			this->label1->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(84, 13);
+			this->label1->Size = System::Drawing::Size(111, 17);
 			this->label1->TabIndex = 1;
 			this->label1->Text = L"alte Dateinamen";
 			// 
-			// textBox1
+			// tbOldString
 			// 
-			this->textBox1->Location = System::Drawing::Point(169, 86);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(165, 20);
-			this->textBox1->TabIndex = 2;
+			this->tbOldString->Location = System::Drawing::Point(320, 171);
+			this->tbOldString->Margin = System::Windows::Forms::Padding(4);
+			this->tbOldString->Name = L"tbOldString";
+			this->tbOldString->Size = System::Drawing::Size(220, 22);
+			this->tbOldString->TabIndex = 2;
+			this->tbOldString->TextChanged += gcnew System::EventHandler(this, &Form1::tbOldString_TextChanged);
 			// 
-			// textBox2
+			// tbNewString
 			// 
-			this->textBox2->Location = System::Drawing::Point(169, 138);
-			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(165, 20);
-			this->textBox2->TabIndex = 3;
+			this->tbNewString->Location = System::Drawing::Point(320, 226);
+			this->tbNewString->Margin = System::Windows::Forms::Padding(4);
+			this->tbNewString->Name = L"tbNewString";
+			this->tbNewString->Size = System::Drawing::Size(220, 22);
+			this->tbNewString->TabIndex = 3;
+			this->tbNewString->TextChanged += gcnew System::EventHandler(this, &Form1::tbNewString_TextChanged);
 			// 
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(166, 70);
+			this->label2->Location = System::Drawing::Point(317, 151);
+			this->label2->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(132, 13);
+			this->label2->Size = System::Drawing::Size(174, 17);
 			this->label2->TabIndex = 4;
 			this->label2->Text = L"zu ändernde Zeichenkette";
 			// 
 			// label3
 			// 
 			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(166, 122);
+			this->label3->Location = System::Drawing::Point(317, 206);
+			this->label3->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(137, 13);
+			this->label3->Size = System::Drawing::Size(180, 17);
 			this->label3->TabIndex = 5;
 			this->label3->Text = L"einzufügende Zeichenkette";
-			// 
-			// button1
-			// 
-			this->button1->Enabled = false;
-			this->button1->Location = System::Drawing::Point(207, 164);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(96, 26);
-			this->button1->TabIndex = 6;
-			this->button1->Text = L"Ersetzen";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &Form1::button1_Click);
 			// 
 			// listBox2
 			// 
 			this->listBox2->FormattingEnabled = true;
 			this->listBox2->HorizontalScrollbar = true;
-			this->listBox2->Location = System::Drawing::Point(340, 31);
+			this->listBox2->ItemHeight = 16;
+			this->listBox2->Location = System::Drawing::Point(548, 39);
+			this->listBox2->Margin = System::Windows::Forms::Padding(4);
 			this->listBox2->Name = L"listBox2";
-			this->listBox2->Size = System::Drawing::Size(147, 212);
+			this->listBox2->Size = System::Drawing::Size(295, 324);
 			this->listBox2->TabIndex = 7;
 			// 
 			// label4
 			// 
 			this->label4->AutoSize = true;
-			this->label4->Location = System::Drawing::Point(337, 15);
+			this->label4->Location = System::Drawing::Point(545, 18);
+			this->label4->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(91, 13);
+			this->label4->Size = System::Drawing::Size(120, 17);
 			this->label4->TabIndex = 8;
 			this->label4->Text = L"neue Dateinamen";
 			// 
-			// button2
+			// btnRename
 			// 
-			this->button2->Enabled = false;
-			this->button2->Location = System::Drawing::Point(207, 196);
-			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(96, 27);
-			this->button2->TabIndex = 9;
-			this->button2->Text = L"Umbenennen";
-			this->button2->UseVisualStyleBackColor = true;
-			this->button2->Click += gcnew System::EventHandler(this, &Form1::button2_Click);
+			this->btnRename->Enabled = false;
+			this->btnRename->Location = System::Drawing::Point(369, 330);
+			this->btnRename->Margin = System::Windows::Forms::Padding(4);
+			this->btnRename->Name = L"btnRename";
+			this->btnRename->Size = System::Drawing::Size(128, 33);
+			this->btnRename->TabIndex = 9;
+			this->btnRename->Text = L"Umbenennen";
+			this->btnRename->UseVisualStyleBackColor = true;
+			this->btnRename->Click += gcnew System::EventHandler(this, &Form1::btnRename_Click);
 			// 
 			// button3
 			// 
-			this->button3->Location = System::Drawing::Point(169, 31);
+			this->button3->Location = System::Drawing::Point(320, 91);
+			this->button3->Margin = System::Windows::Forms::Padding(4);
 			this->button3->Name = L"button3";
-			this->button3->Size = System::Drawing::Size(162, 24);
+			this->button3->Size = System::Drawing::Size(220, 30);
 			this->button3->TabIndex = 10;
 			this->button3->Text = L"Ordner auswählen";
 			this->button3->UseVisualStyleBackColor = true;
 			this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
 			// 
+			// textBox3
+			// 
+			this->textBox3->Location = System::Drawing::Point(320, 63);
+			this->textBox3->Margin = System::Windows::Forms::Padding(4);
+			this->textBox3->Name = L"textBox3";
+			this->textBox3->Size = System::Drawing::Size(220, 22);
+			this->textBox3->TabIndex = 11;
+			this->textBox3->Text = L".mp3";
+			this->textBox3->TextChanged += gcnew System::EventHandler(this, &Form1::textBox3_TextChanged);
+			// 
+			// label5
+			// 
+			this->label5->AutoSize = true;
+			this->label5->Location = System::Drawing::Point(317, 42);
+			this->label5->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(39, 17);
+			this->label5->TabIndex = 12;
+			this->label5->Text = L"Filter";
+			// 
+			// btnSave
+			// 
+			this->btnSave->Enabled = false;
+			this->btnSave->Location = System::Drawing::Point(320, 282);
+			this->btnSave->Name = L"btnSave";
+			this->btnSave->Size = System::Drawing::Size(103, 33);
+			this->btnSave->TabIndex = 13;
+			this->btnSave->Text = L"Merken";
+			this->btnSave->UseVisualStyleBackColor = true;
+			this->btnSave->Click += gcnew System::EventHandler(this, &Form1::btnSave_Click);
+			// 
+			// btnReset
+			// 
+			this->btnReset->Enabled = false;
+			this->btnReset->Location = System::Drawing::Point(437, 282);
+			this->btnReset->Name = L"btnReset";
+			this->btnReset->Size = System::Drawing::Size(103, 33);
+			this->btnReset->TabIndex = 14;
+			this->btnReset->Text = L"Reset";
+			this->btnReset->UseVisualStyleBackColor = true;
+			this->btnReset->Click += gcnew System::EventHandler(this, &Form1::btnReset_Click);
+			// 
+			// btnDown
+			// 
+			this->btnDown->Location = System::Drawing::Point(162, 366);
+			this->btnDown->Name = L"btnDown";
+			this->btnDown->Size = System::Drawing::Size(52, 23);
+			this->btnDown->TabIndex = 15;
+			this->btnDown->Text = L"Down";
+			this->btnDown->UseVisualStyleBackColor = true;
+			this->btnDown->Click += gcnew System::EventHandler(this, &Form1::btnDown_Click);
+			// 
+			// btnUp
+			// 
+			this->btnUp->Location = System::Drawing::Point(104, 366);
+			this->btnUp->Name = L"btnUp";
+			this->btnUp->Size = System::Drawing::Size(52, 23);
+			this->btnUp->TabIndex = 16;
+			this->btnUp->Text = L"Up";
+			this->btnUp->UseVisualStyleBackColor = true;
+			this->btnUp->Click += gcnew System::EventHandler(this, &Form1::btnUp_Click);
+			// 
+			// cbAddNumbers
+			// 
+			this->cbAddNumbers->AutoSize = true;
+			this->cbAddNumbers->Location = System::Drawing::Point(320, 255);
+			this->cbAddNumbers->Name = L"cbAddNumbers";
+			this->cbAddNumbers->Size = System::Drawing::Size(197, 21);
+			this->cbAddNumbers->TabIndex = 17;
+			this->cbAddNumbers->Text = L"Nummerierung hinzufügen";
+			this->cbAddNumbers->UseVisualStyleBackColor = true;
+			this->cbAddNumbers->CheckedChanged += gcnew System::EventHandler(this, &Form1::cbAddNumbers_CheckedChanged);
+			// 
 			// Form1
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(499, 266);
+			this->ClientSize = System::Drawing::Size(858, 402);
+			this->Controls->Add(this->cbAddNumbers);
+			this->Controls->Add(this->btnUp);
+			this->Controls->Add(this->btnDown);
+			this->Controls->Add(this->btnReset);
+			this->Controls->Add(this->btnSave);
+			this->Controls->Add(this->label5);
+			this->Controls->Add(this->textBox3);
 			this->Controls->Add(this->button3);
-			this->Controls->Add(this->button2);
+			this->Controls->Add(this->btnRename);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->listBox2);
-			this->Controls->Add(this->button1);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label2);
-			this->Controls->Add(this->textBox2);
-			this->Controls->Add(this->textBox1);
+			this->Controls->Add(this->tbNewString);
+			this->Controls->Add(this->tbOldString);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->listBox1);
+			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"Form1";
-			this->Text = L"mp3-Umbenenner";
+			this->Text = L"Datei-Umbenenner";
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -215,161 +317,198 @@ namespace zeichenrename {
 	private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e)
 			 {
 			 }
-
-	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e)
+	private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e)
 		 {
-			 String ^alt = textBox1->Text;
-			 String ^neu = textBox2->Text;
+			 System::Windows::Forms::DialogResult result = folderBrowserDialog1->ShowDialog();
 
-			 array<String^>^ oldnames=alteNamen;
-			 array<String^>^ newnames;
+			 if ( result == System::Windows::Forms::DialogResult::OK )
+				 gFilePath = folderBrowserDialog1->SelectedPath;
+			 else
+				 return;
 
-			 int m = anzahl;
+			 folderUpdate();
+		 }
+	private: System::Void textBox3_TextChanged(System::Object^  sender, System::EventArgs^  e)
+		 {
+			 folderUpdate();
+		 }
+	private: System::Void tbOldString_TextChanged(System::Object^  sender, System::EventArgs^  e)
+		 {
+			 filenameUpdate();
+		 }
+	private: System::Void tbNewString_TextChanged(System::Object^  sender, System::EventArgs^  e)
+		 {
+			 filenameUpdate();
+		 }
+
+		void filenameUpdate()
+		{
+			if ((tbOldString->Text == "" && !cbAddNumbers->Checked) || gNumFiles == 0)
+				 goto filenameFail;
 
 			 umbenennen dasda;
 
-			 newnames = dasda.veraendern(oldnames, alt, neu, m);
+			 gNewNames = dasda.veraendern(gIntermediateNames, tbOldString->Text, tbNewString->Text, gNumFiles);
 
-			 neueNamen = newnames;
+			 if (cbAddNumbers->Checked)
+				 gNewNames = dasda.addNumbers(gNewNames, gNumFiles);
 
-			 IEnumerator^ files = newnames->GetEnumerator();
+			 IEnumerator^ files = gNewNames->GetEnumerator();
 			 listBox2->BeginUpdate();
 			 listBox2->Items->Clear();
+			 String^ fileName;
 			 while ( files->MoveNext() )
 			 {
-				 String^ fileName = safe_cast<String^>(files->Current);
+				 fileName = safe_cast<String^>(files->Current);
 				 listBox2->Items->Add( fileName );
 			 }
 			 listBox2->EndUpdate();
 
-			 button2->Enabled = true;
-
-			 //if (!alterName) return;
-
-
-			 /*static string newname[30]; 
-			 newp = &newname[0];
-			 string altstr, neustr;
-			 int n,l,m,w,k;
+			 btnSave->Enabled = true;
+			 btnRename->Enabled = true;
 			 
+			 return;
+
+filenameFail:
 			 listBox2->Items->Clear();
+			 btnRename->Enabled = false;
+			 btnSave->Enabled = false;
+			 return;
+		}
 
-			 altstr = gc2std(alt);
-			 neustr = gc2std(neu);
-			 k=altstr.length();
+		void folderUpdate()
+		{
+			if (!gFilePath)
+				goto folderFail;
+			
+			suche ziel;
+			array<String^>^ ordnerinhalt = ziel.readDirectory(gFilePath);
+			
+			/* bei Fehler beim auslesen des Ordners oder keine Dateien gefunden */
+			if (!ordnerinhalt)
+				goto folderFail;
 
-			 for (n=0; n<*anzahl;n++)
-			 {
-				newname[n]= *(oldp+n);
-				l=newname[n].length();
-				for (m=0;m<=l;m++)
-				{
-					w=newname[n].find(altstr,ios::cur);
-					if (w!=-1)
-					{
-							  newname[n].erase(w,k);
-							  newname[n].insert(w,neustr);
-					}
-				}
-				listBox2->Items->Add( gcnew String((newname[n]).c_str()) );
-				button2->Enabled = true;
-			 }*/
+			/* Dateinamen in gewünschtes Format schneiden */
+			ordnerinhalt = ziel.filter(ordnerinhalt, gFilePath);
+			ordnerinhalt = ziel.find(ordnerinhalt, textBox3->Text);
 
-		 }
-	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e)
+			gOldNames = ordnerinhalt;
+
+			IEnumerator^ files = ordnerinhalt->GetEnumerator();
+			int n=0;
+			listBox1->BeginUpdate();
+			listBox1->Items->Clear();
+			while ( files->MoveNext() ) {
+				String^ fileName = safe_cast<String^>(files->Current);
+				listBox1->Items->Add( fileName );
+				n++;
+			}
+			gNumFiles = n;
+			listBox1->EndUpdate();
+
+			if (gNumFiles == 0)
+				goto folderFail;
+			
+			/* IntermediateNames als Grundlage für Bearbeitung speichern */
+			gIntermediateNames->Resize(gIntermediateNames, gNumFiles);
+			gOldNames->Copy(gOldNames, gIntermediateNames, gNumFiles);
+
+			if (gNumFiles)
+				 gIntermediateNames->Copy(gOldNames, gIntermediateNames, gNumFiles);
+			
+			filenameUpdate();
+
+			return;
+
+folderFail:
+			//System::Windows::Forms::MessageBox::Show("keine mp3s gefunden");
+			gNumFiles = 0;
+			filenameUpdate();
+			
+			btnRename->Enabled = false;
+			btnReset->Enabled = false;
+			btnSave->Enabled = false;
+			return;
+		}
+
+private: System::Void btnRename_Click(System::Object^  sender, System::EventArgs^  e)
 		 {
-			 array<String^>^ newnames = neueNamen;
-			 array<String^>^ oldnames = alteNamen;
+			 for (int i=0; i<gNumFiles; i++)
+				 System::IO::File::Move(gFilePath + "\\" + gOldNames[i], gFilePath + "\\" + gNewNames[i]);
+				//System::Windows::Forms::MessageBox::Show(gFilePath + "\\" + gOldNames[i] + " -> " + gFilePath + "\\" + gNewNames[i]);
 
-
-			 int n = anzahl;
-			 int i;
-
-			 for (i=0; i<=n; i++)
-			 {
-				 System::IO::File::Move(oldnames[i],newnames[i]);
-			 }
-
-			 /*string rename[30];
-			 int n;
-			 char nstring[100];
-
-			 ofstream dings("do.bat");
-			 for (n=0; n<*anzahl;n++)
-			 {
-				 rename[n]= "rename \"" +  *(oldp+n) +  "\" " + "\"" + *(newp+n) + "\"";
-				 
-				 //strcpy_s(nstring, rename[n].c_str());
-				 //strcat_s(nstring, " (char *)");
-				 //system(nstring);
-				 dings << rename[n];
-				 dings << char(10);
-			 }
-			 system("mach.bat");
-			 system("del mach.bat");
-			 system("del buffer.txt");*/
+			 folderUpdate();
 		 }
-
-private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e)
+private: System::Void btnSave_Click(System::Object^  sender, System::EventArgs^  e)
 		 {
-			 suche ziel;
+			 gIntermediateNames->Copy(gNewNames, gIntermediateNames, gNumFiles);
 
-			 String ^pfad;
+			 tbNewString->Clear();
+			 cbAddNumbers->Checked = false;
+			 btnReset->Enabled = true;
+		 }
+private: System::Void btnReset_Click(System::Object^  sender, System::EventArgs^  e)
+		 {
+			 if (gNumFiles)
+				 gIntermediateNames->Copy(gOldNames, gIntermediateNames, gNumFiles);
 
-			 System::Windows::Forms::DialogResult result = folderBrowserDialog1->ShowDialog();
+			 filenameUpdate();
+		 }
+private: System::Void btnDown_Click(System::Object^  sender, System::EventArgs^  e)
+		 {
+			 int pos = listBox1->SelectedIndex;
 
-			 if ( result == System::Windows::Forms::DialogResult::OK )
-			 {
-				 pfad = folderBrowserDialog1->SelectedPath;
-			 }
-			 else return;
+			 if (pos == -1 || pos >= gNumFiles - 1)
+				return;
 
-			 array<String^>^ ordnerinhalt = ziel.readDirectory(pfad);
+			 String^ swap;
 
-			 if (!ordnerinhalt) return; //bei Fehler beim auslesen des Ordners oder keine Dateien gefunden
+			 /* String Arrays */
+			 swap = gOldNames[pos];
+			 gOldNames[pos] = gOldNames[pos + 1];
+			 gOldNames[pos + 1] = swap;
 			 
-			 ordnerinhalt = ziel.filter(ordnerinhalt, pfad);
+			 swap = gIntermediateNames[pos];
+			 gIntermediateNames[pos] = gIntermediateNames[pos + 1];
+			 gIntermediateNames[pos + 1] = swap;
 
-			 ordnerinhalt = ziel.find(ordnerinhalt);
-
-			 alteNamen = ordnerinhalt;
+			 filenameUpdate();
 			 
-			 int n=0;
+			 /* Listbox */
+			 swap = listBox1->SelectedItem->ToString();
+			 listBox1->Items->RemoveAt(pos);
+			 listBox1->Items->Insert(pos + 1, swap);
+			 listBox1->SetSelected(pos + 1, true);
+		 }
+private: System::Void btnUp_Click(System::Object^  sender, System::EventArgs^  e)
+		 {
+			 int pos = listBox1->SelectedIndex;
 
-			 listBox1->BeginUpdate();
-			 listBox1->Items->Clear();
-
-			 IEnumerator^ files = ordnerinhalt->GetEnumerator();
-			 while ( files->MoveNext() )
-			 {
-				 String^ fileName = safe_cast<String^>(files->Current);
-				 listBox1->Items->Add( fileName );
-				 n++;
-			 }
-
-			 anzahl=n;
+			 if (pos <= 0)
+				return;
 			 
-			 listBox1->EndUpdate();
+			 String^ swap;
 
-			 if (ordnerinhalt->Length==0)
-			 {
-				 System::Windows::Forms::MessageBox::Show("keine mp3s gefunden");
-				 return;
-			 }
+			 /* String Arrays */
+			 swap = gOldNames[pos];
+			 gOldNames[pos] = gOldNames[pos - 1];
+			 gOldNames[pos - 1] = swap;
 			 
-			 button1->Enabled = true;
+			 swap = gIntermediateNames[pos];
+			 gIntermediateNames[pos] = gIntermediateNames[pos - 1];
+			 gIntermediateNames[pos - 1] = swap;
+
+			 filenameUpdate();
+			 
+			 /* Listbox */
+			 swap = listBox1->SelectedItem->ToString();
+			 listBox1->Items->RemoveAt(pos);
+			 listBox1->Items->Insert(pos - 1, swap);
+			 listBox1->SetSelected(pos - 1, true);
+		 }
+private: System::Void cbAddNumbers_CheckedChanged(System::Object^  sender, System::EventArgs^  e)
+		 {
+			 filenameUpdate();
 		 }
 };
 }
-
-
-//zur konvertierung String -> string
-/*string gc2std(System::String^ s)  
-	{  
-		using System::IntPtr;  
-  		using System::Runtime::InteropServices::Marshal;  
-		IntPtr ip = Marshal::StringToHGlobalAnsi(s);  
-		std::string ss = static_cast<const char*>(ip.ToPointer());  
-		Marshal::FreeHGlobal(ip);  
-		return ss;  
-	}*/  

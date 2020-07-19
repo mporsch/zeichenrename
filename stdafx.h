@@ -4,5 +4,5 @@
 #pragma once
 
 // TODO: Hier auf zusätzliche Header, die das Programm erfordert, verweisen.
-#include "suchen.h"
-#include "umbenennen.h"
+#include "functions.h"
+//#include "umbenennen.h"
